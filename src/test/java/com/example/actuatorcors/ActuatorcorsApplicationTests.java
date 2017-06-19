@@ -88,13 +88,17 @@ public class ActuatorcorsApplicationTests {
         //                        NemesisHttpHeaders.X_NEMESIS_PASSWORD, "nimda").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).contentType(
         //                        MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn().getResponse().getHeader(NemesisHttpHeaders.X_NEMESIS_TOKEN);
 
-        //        mockMvc.perform(options(managementServerProperties.getContextPath() + "/health").accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(
-        //                        status().isOk()).andExpect(
-        //                        header().string("access-control-allow-methods", is(equalTo("GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS")))).andExpect(
-        //                        header().string("access-control-allow-headers", is(equalTo("x-nemesis-token, x-requested-with")))).andExpect(
-        //                        header().string("access-control-allow-origin", is(equalTo("http://localhost:8080"))));
+        mockMvc.perform(options(managementServerProperties.getContextPath() + "/health").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
+                                                                                                                                              "http://localhost:8080").header(
+                        "Access-Control-Request-Method", "GET").header("Access-Control-Request-Headers", "x-nemesis-token, x-requested-with")).andExpect(
+                        status().isOk()).andExpect(
+                        header().string("access-control-allow-methods", is(equalTo("GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS")))).andExpect(
+                        header().string("access-control-allow-headers", is(equalTo("x-nemesis-token, x-requested-with")))).andExpect(
+                        header().string("access-control-allow-origin", is(equalTo("http://localhost:8080"))));
 
-        mockMvc.perform(options(managementServerProperties.getContextPath() + "/env").accept(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(
+        mockMvc.perform(options(managementServerProperties.getContextPath() + "/env").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
+                                                                                                                                           "http://localhost:8080").header(
+                        "Access-Control-Request-Method", "GET").header("Access-Control-Request-Headers", "x-nemesis-token, x-requested-with")).andExpect(
                         status().isOk()).andExpect(
                         header().string("access-control-allow-methods", is(equalTo("GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS")))).andExpect(
                         header().string("access-control-allow-headers", is(equalTo("x-nemesis-token, x-requested-with")))).andExpect(
