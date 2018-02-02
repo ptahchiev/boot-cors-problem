@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ActuatorcorsApplicationTests {
 
     @Autowired
-    private ManagementServerProperties managementServerProperties;
+    private WebEndpointProperties webEndpointProperties;
 
     @Resource
     private WebApplicationContext wac;
@@ -81,14 +81,14 @@ public class ActuatorcorsApplicationTests {
 
         String token = "invalid-token";
 
-        mockMvc.perform(get(managementServerProperties.getContextPath() + "/env").header("x-auth-token", token).secure(true)).andExpect(
+        mockMvc.perform(get(webEndpointProperties.getBasePath() + "/env").header("x-auth-token", token).secure(true)).andExpect(
                         status().isUnauthorized());
         //
         //        token = mockMvc.perform(get(repositoryRestProperties.getBasePath() + "/auth").header(NemesisHttpHeaders.X_NEMESIS_USERNAME, "admin").header(
         //                        NemesisHttpHeaders.X_NEMESIS_PASSWORD, "nimda").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).contentType(
         //                        MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn().getResponse().getHeader(NemesisHttpHeaders.X_NEMESIS_TOKEN);
 
-        mockMvc.perform(options(managementServerProperties.getContextPath() + "/health").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
+        mockMvc.perform(options(webEndpointProperties.getBasePath() + "/health").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
                                                                                                                                               "http://localhost:8080").header(
                         "Access-Control-Request-Method", "GET").header("Access-Control-Request-Headers", "x-nemesis-token, x-requested-with")).andExpect(
                         status().isOk()).andExpect(
@@ -96,7 +96,7 @@ public class ActuatorcorsApplicationTests {
                         header().string("access-control-allow-headers", is(equalTo("x-nemesis-token, x-requested-with")))).andExpect(
                         header().string("access-control-allow-origin", is(equalTo("http://localhost:8080"))));
 
-        mockMvc.perform(options(managementServerProperties.getContextPath() + "/env").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
+        mockMvc.perform(options(webEndpointProperties.getBasePath() + "/env").accept(MediaType.APPLICATION_JSON_UTF8_VALUE).header("Origin",
                                                                                                                                            "http://localhost:8080").header(
                         "Access-Control-Request-Method", "GET").header("Access-Control-Request-Headers", "x-nemesis-token, x-requested-with")).andExpect(
                         status().isOk()).andExpect(
